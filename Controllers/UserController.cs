@@ -1,14 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using MongoDB.Driver;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using MongoDB.Driver;
 
 namespace MyWebApi.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IMongoCollection<BsonDocument> _collection;
@@ -43,37 +45,47 @@ namespace MyWebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult InsertUser()
+        public IActionResult Post([FromBody] UserData userData)
         {
-            // Create a document to be inserted
-            var document = new BsonDocument
+            // Validate input
+            if (!ModelState.IsValid)
             {
-                { "name", "John Doe" },
-                { "age", 30 },
-                { "city", "New York" }
+                return BadRequest(ModelState);
+            }
+
+            // Convert UserData to BsonDocument
+            BsonDocument userDocument = new BsonDocument
+            {
+                { "Name", userData.Name },
+                { "Age", userData.Age },
+                { "Gender", userData.Gender },
+                { "Birthday", userData.Birthday }
             };
-
-            
-            // Insert the document into the collection
-            InsertDocument(document);
-            string jsonString = document.ToJson();
-
+            InsertDocument(userDocument);
+            string jsonString = userDocument.ToJson();
+            // For demonstration purposes, let's just return the received data
             return Ok(jsonString);
-
-            
         }
 
-        private void InsertDocument(BsonDocument document)
+       private void InsertDocument(BsonDocument document)
         {
             _collection.InsertOne(document);
             Console.WriteLine("Document inserted successfully.");
         }
-
 
         private IEnumerable<BsonDocument> GetDocuments()
         {
             // Perform a query to get all documents from the collection
             return _collection.Find(new BsonDocument()).ToList();
         }
+    }
+
+    // Define a class to represent the user data
+    public class UserData
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+        public string Gender { get; set; }
+        public DateTime Birthday { get; set; }
     }
 }

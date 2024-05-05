@@ -47,3 +47,5 @@ D:\project\exercise\New folder\MyWebApi\bin\Debug\net8.0\ZstdSharp.dll
 D:\project\exercise\New folder\MyWebApi\bin\Debug\net8.0\runtimes\linux\native\libmongocrypt.so
 D:\project\exercise\New folder\MyWebApi\bin\Debug\net8.0\runtimes\osx\native\libmongocrypt.dylib
 D:\project\exercise\New folder\MyWebApi\bin\Debug\net8.0\runtimes\win\native\mongocrypt.dll
+D:\project\exercise\New folder\MyWebApi\obj\Debug\net8.0\MyWebApi.sourcelink.json
+D:\project\exercise\New folder\MyWebApi\bin\Debug\net8.0\Newtonsoft.Json.dll

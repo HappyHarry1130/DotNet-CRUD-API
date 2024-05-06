@@ -67,6 +67,27 @@ namespace MyWebApi.Controllers
             return Ok(jsonString);
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(string id)
+        {
+            // Validate input
+            if (!ObjectId.TryParse(id, out var objectId) || objectId == ObjectId.Empty)
+            {
+                return BadRequest("Invalid ObjectId.");
+            }
+
+            // Perform deletion based on ObjectId
+            var filter = Builders<BsonDocument>.Filter.Eq("_id", objectId);
+            var result = _collection.DeleteOne(filter);
+
+            if (result.DeletedCount == 0)
+            {
+                return NotFound($"No user with ObjectId '{objectId}' found.");
+            }
+
+            return Ok($"User with ObjectId '{objectId}' deleted successfully.");
+        }
+
        private void InsertDocument(BsonDocument document)
         {
             _collection.InsertOne(document);

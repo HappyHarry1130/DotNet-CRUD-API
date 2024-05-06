@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using MongoDB.Driver;
+using MyWebApi.Models;
 
 namespace MyWebApi.Controllers
 {
@@ -133,11 +134,5 @@ public IActionResult Put(string id, [FromBody] UserData userData)
     }
 
     // Define a class to represent the user data
-    public class UserData
-    {
-        public string Name { get; set; }
-        public int Age { get; set; }
-        public string Gender { get; set; }
-        public DateTime Birthday { get; set; }
-    }
+    
 }

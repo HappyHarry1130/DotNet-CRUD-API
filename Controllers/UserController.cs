@@ -67,6 +67,37 @@ namespace MyWebApi.Controllers
             return Ok(jsonString);
         }
 
+        [HttpPut("{id}")]
+public IActionResult Put(string id, [FromBody] UserData userData)
+{
+    // Validate input
+    if (!ObjectId.TryParse(id, out var objectId) || objectId == ObjectId.Empty)
+    {
+        return BadRequest("Invalid ObjectId.");
+    }
+
+    // Create filter for the user with the given ObjectId
+    var filter = Builders<BsonDocument>.Filter.Eq("_id", objectId);
+
+    // Create update definition to specify changes to the user document
+    var update = Builders<BsonDocument>.Update
+        .Set("Name", userData.Name)
+        .Set("Age", userData.Age)
+        .Set("Gender", userData.Gender)
+        .Set("Birthday", userData.Birthday);
+
+    // Perform update operation
+    var result = _collection.UpdateOne(filter, update);
+
+    if (result.ModifiedCount == 0)
+    {
+        return NotFound($"No user with ObjectId '{objectId}' found.");
+    }
+
+    return Ok($"User with ObjectId '{objectId}' updated successfully.");
+}
+
+
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
